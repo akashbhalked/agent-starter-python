@@ -56,7 +56,8 @@ RUN mkdir -p /home/appuser/.cache
 # --locked ensures we use exact versions from uv.lock for reproducible builds
 # This creates a virtual environment and installs all dependencies
 # Ensure your uv.lock file is checked in for consistency across environments
-RUN uv sync --locked
+RUN pip install --upgrade pip setuptools wheel
+RUN pip install -r requirements.txt
 
 # Pre-download any ML models or files the agent needs
 # This ensures the container is ready to run immediately without downloading
@@ -70,4 +71,4 @@ EXPOSE 8081
 # Run the application using UV
 # UV will activate the virtual environment and run the agent
 # The "start" command tells the worker to connect to LiveKit and begin waiting for jobs
-CMD ["uv", "run", "src/agent.py", "start"]
+CMD ["python", "src/agent.py", "start"]
